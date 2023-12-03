@@ -1,3 +1,4 @@
+use std::ffi::c_void;
 fn main() {
     let device = metal::Device::system_default().unwrap();
     let lib = device
@@ -16,12 +17,12 @@ fn main() {
 
     let buffer_len = std::mem::size_of::<f32>() * a.len();
     let buffer_a = device.new_buffer_with_data(
-        unsafe { std::mem::transmute(a.as_ptr()) },
+        a.as_ptr() as *const c_void,
         buffer_len as u64,
         metal::MTLResourceOptions::StorageModeShared,
     );
     let buffer_b = device.new_buffer_with_data(
-        unsafe { std::mem::transmute(b.as_ptr()) },
+        b.as_ptr() as *const c_void,
         buffer_len as u64,
         metal::MTLResourceOptions::StorageModeShared,
     );
